@@ -1,12 +1,59 @@
 import express from 'express';
 import { connectDatabase } from './config/database';
+import Activity from './models/activity';
+import Leaderboard from './models/leaderboard';
+import Team from './models/team';
+import User from './models/user';
+import Workout from './models/workout';
 
 const app = express();
 const port = Number(process.env.PORT || 8000);
+const codespaceName = process.env.CODESPACE_NAME;
+const baseUrl = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev`
+  : 'http://localhost:8000';
 
 app.use(express.json());
 app.get('/api/health', (_request, response) => {
   response.json({ status: 'ok' });
+});
+
+app.get('/api/', (_request, response) => {
+  response.json({
+    baseUrl,
+    endpoints: [
+      '/api/users/',
+      '/api/teams/',
+      '/api/activities/',
+      '/api/leaderboard/',
+      '/api/workouts/',
+    ],
+  });
+});
+
+app.get('/api/users/', async (_request, response) => {
+  response.json(await User.find().lean());
+});
+
+app.get('/api/teams/', async (_request, response) => {
+  response.json(await Team.find().lean());
+});
+
+app.get('/api/activities/', async (_request, response) => {
+  response.json(await Activity.find().sort({ date: -1 }).lean());
+});
+
+app.get('/api/leaderboard/', async (_request, response) => {
+  response.json(await Leaderboard.find().sort({ rank: 1, points: -1 }).lean());
+});
+
+app.get('/api/workouts/', async (_request, response) => {
+  response.json(await Workout.find().lean());
+});
+
+app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
+  console.error('API request failed:', error);
+  response.status(500).json({ error: 'Internal server error' });
 });
 
 async function startServer() {
