@@ -1,23 +1,19 @@
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
+import { NavLink, Route, Routes } from 'react-router-dom'
+import Activities from './components/Activities.jsx'
+import Leaderboard from './components/Leaderboard.jsx'
+import Teams from './components/Teams.jsx'
+import Users from './components/Users.jsx'
+import Workouts from './components/Workouts.jsx'
 import logo from '../../../docs/octofitapp-small.png'
 import './App.css'
 
 const sections = [
-  { path: '/activity', label: 'Activity' },
-  { path: '/teams', label: 'Teams' },
-  { path: '/leaderboard', label: 'Leaderboard' },
-  { path: '/workouts', label: 'Workouts' },
+  { path: '/activities', label: 'Activities', Component: Activities },
+  { path: '/leaderboard', label: 'Leaderboard', Component: Leaderboard },
+  { path: '/teams', label: 'Teams', Component: Teams },
+  { path: '/users', label: 'Users', Component: Users },
+  { path: '/workouts', label: 'Workouts', Component: Workouts },
 ]
-
-function EmptySection({ title, message }) {
-  return (
-    <section className="section-view" aria-labelledby="section-title">
-      <p className="section-kicker">OCTOFIT / TRACKER</p>
-      <h1 id="section-title">{title}</h1>
-      <p className="section-message">{message}</p>
-    </section>
-  )
-}
 
 function Overview() {
   return (
@@ -44,34 +40,31 @@ function Overview() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app-shell">
-        <header className="app-header">
-          <NavLink className="brand" to="/" aria-label="OctoFit Tracker home">
-            <img src={logo} alt="" />
-            <span>OctoFit <strong>Tracker</strong></span>
-          </NavLink>
-          <nav className="nav app-nav" aria-label="Main navigation">
-            <NavLink className="nav-link" end to="/">Overview</NavLink>
-            {sections.map((section) => (
-              <NavLink className="nav-link" key={section.path} to={section.path}>
-                {section.label}
-              </NavLink>
-            ))}
-          </nav>
-        </header>
-        <main className="container-fluid app-main">
-          <Routes>
-            <Route element={<Overview />} path="/" />
-            <Route element={<EmptySection message="Your logged sessions will appear here." title="Activity" />} path="/activity" />
-            <Route element={<EmptySection message="Your training crew will take shape here." title="Teams" />} path="/teams" />
-            <Route element={<EmptySection message="Team standings will appear here." title="Leaderboard" />} path="/leaderboard" />
-            <Route element={<EmptySection message="Your workout suggestions will appear here." title="Workouts" />} path="/workouts" />
-            <Route element={<Overview />} path="*" />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+    <div className="app-shell">
+      <header className="app-header">
+        <NavLink className="brand" to="/" aria-label="OctoFit Tracker home">
+          <img src={logo} alt="" />
+          <span>OctoFit <strong>Tracker</strong></span>
+        </NavLink>
+        <nav className="nav app-nav" aria-label="Main navigation">
+          <NavLink className="nav-link" end to="/">Overview</NavLink>
+          {sections.map((section) => (
+            <NavLink className="nav-link" key={section.path} to={section.path}>
+              {section.label}
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+      <main className="container-fluid app-main">
+        <Routes>
+          <Route element={<Overview />} path="/" />
+          {sections.map(({ path, Component }) => (
+            <Route element={<Component />} key={path} path={path} />
+          ))}
+          <Route element={<Overview />} path="*" />
+        </Routes>
+      </main>
+    </div>
   )
 }
 

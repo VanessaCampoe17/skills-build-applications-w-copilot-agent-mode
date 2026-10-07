@@ -319,6 +319,31 @@
   font-size: clamp(44px, 7vw, 72px);
 }
 
+.collection-status {
+  margin-top: 28px;
+  color: #52645d;
+}
+
+.collection-table-wrap {
+  margin-top: 32px;
+  border: 1px solid #d8dfd6;
+  border-radius: 6px;
+  background: rgba(250, 251, 248, 0.94);
+}
+
+.collection-table {
+  margin-bottom: 0;
+  --bs-table-bg: transparent;
+  --bs-table-color: #163d35;
+}
+
+.collection-table th {
+  color: #52645d;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 @keyframes arrive {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
