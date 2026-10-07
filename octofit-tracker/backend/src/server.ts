@@ -18,6 +18,7 @@ app.get('/api/health', (_request, response) => {
   response.json({ status: 'ok' });
 });
 
+
 app.get('/api/', (_request, response) => {
   response.json({
     baseUrl,
